@@ -1,0 +1,5 @@
+.game-card{
+    width: 220px;
+    border-radius: 12px;
+    overflow: hidden;
+}
