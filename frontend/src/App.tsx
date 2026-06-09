@@ -7,9 +7,11 @@ import { useState } from "react"
 function App() {
 
     const [count, setCount] = useState(0)
+    const [search, setSearch] = useState("")
+
 
     return (
-        <>
+        <>  
             <div>
                 <Header
                     title="Gaming Hub"
@@ -20,18 +22,18 @@ function App() {
             </div>
 
             <div>
-                <SearchBar></SearchBar>
+                <SearchBar setSearch={setSearch}></SearchBar>
             </div>
 
             <div>
                 <h1>All Games</h1>
-                <Library gameSection="all"></Library>
+                <Library gameSection="all" search={search}></Library>
 
                 <h1>PS2 Games </h1>
-                <Library gameSection="ps2"></Library>
+                <Library gameSection="ps2" search={search}></Library>
                 
                 <h1>Switch Games</h1>
-                <Library gameSection="switch"></Library>
+                <Library gameSection="switch" search={search}></Library>
             </div>
         </>
     );

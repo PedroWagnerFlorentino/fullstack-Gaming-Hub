@@ -1,47 +1,33 @@
 import GameCard from "../components/GameCard"
-import type { Game } from "../types/Games"
+import getGames from "../services/gameServices"
 
 interface LibraryProps {
     gameSection: string //representa a secao que tem que mostrar os jogos, ex: ps2, switch, p1, etc
+    search: string
 }
-function Library({ gameSection }: LibraryProps) {
-    const games: Game[] = [
-        {
-            id: 1,
-            title: "God of War",
-            platform: "Plastation2",
-            emulator: "Ps2",
-            cover: ""
-        },
-        {
-            id: 2,
-            title: "Pokemon Sword",
-            platform: "Nintendo Switch",
-            emulator: "Switch",
-            cover: ""
-        },
-        {
-            id: 3,
-            title: "Scaler",
-            platform: "Plastation2",
-            emulator: "Ps2",
-            cover: ""
-        },
-        {
-            id: 4,
-            title: "Mario Odsei",
-            platform: "Nintendo Switch",
-            emulator: "Switch",
-            cover: ""
-        }
-    ];
+function Library({ gameSection, search }: LibraryProps) {
 
+    const games = getGames();
+
+    const filteredGames = games.filter((game) => 
+        game.title.toLowerCase().includes(search.toLowerCase()) // se o titulo do jogo estiver na pesquisa ele vai para a variavel
+    );
+    if(search !== ""){
+     return (
+            filteredGames.map((game) => (
+            <GameCard
+                title={game.title}
+                emulator={game.emulator}
+                cover={game.cover}
+            />))
+        );
+    }
     const ps2games = games.filter(
         game => game.platform === "Plastation2"
     );
     const nsGames = games.filter(
         game => game.platform === "Nintendo Switch"
-    )
+    );
     if (gameSection === "all") {
         return (
             games.map((game) => (
