@@ -1,5 +1,5 @@
 interface SearchBarProps {
-    setSearch: Function
+    setSearch: (value: string) => void
 };
 
 

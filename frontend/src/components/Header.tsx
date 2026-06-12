@@ -1,13 +1,11 @@
 interface HeaderProps {
     title: string;
-    count: number;
 }
 
-function Header({ title, count }: HeaderProps){
+function Header({ title }: HeaderProps){
     return(
         <header>
             <h1>{title}</h1>
-            <p>{count}</p>
         </header>
     );
 }

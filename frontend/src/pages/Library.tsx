@@ -9,32 +9,27 @@ function Library({ gameSection, search }: LibraryProps) {
 
     const games = getGames();
 
-    const filteredGames = games.filter((game) => 
+    const filteredGames = games.filter((game) =>
         game.title.toLowerCase().includes(search.toLowerCase()) // se o titulo do jogo estiver na pesquisa ele vai para a variavel
     );
-    if(search !== ""){
-     return (
-            filteredGames.map((game) => (
-            <GameCard
-                title={game.title}
-                emulator={game.emulator}
-                cover={game.cover}
-            />))
-        );
-    }
-    const ps2games = games.filter(
+
+    const baseList = search !== "" ? filteredGames : games
+
+    const ps2games = baseList.filter(
         game => game.platform === "Plastation2"
     );
-    const nsGames = games.filter(
+    const nsGames = baseList.filter(
         game => game.platform === "Nintendo Switch"
     );
+
     if (gameSection === "all") {
         return (
-            games.map((game) => (
+            baseList.map((game) => (
                 <GameCard
                     title={game.title}
                     emulator={game.emulator}
                     cover={game.cover}
+                    executablePath=""
                 />
             ))
         )
@@ -47,6 +42,7 @@ function Library({ gameSection, search }: LibraryProps) {
                     title={game.title}
                     emulator={game.emulator}
                     cover={game.cover}
+                    executablePath=""
                 />
             ))
         )
@@ -59,6 +55,7 @@ function Library({ gameSection, search }: LibraryProps) {
                     title={game.title}
                     emulator={game.emulator}
                     cover={game.cover}
+                    executablePath=""
                 />
             ))
         )

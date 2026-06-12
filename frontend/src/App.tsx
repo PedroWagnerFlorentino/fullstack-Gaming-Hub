@@ -6,7 +6,6 @@ import { useState } from "react"
 
 function App() {
 
-    const [count, setCount] = useState(0)
     const [search, setSearch] = useState("")
 
 
@@ -14,11 +13,9 @@ function App() {
         <>  
             <div>
                 <Header
-                    title="Gaming Hub"
-                    count={count}
+                    title="Gaming Hub"               
                 />
 
-                <button onClick={() => setCount(count + 1)}> + </button>
             </div>
 
             <div>

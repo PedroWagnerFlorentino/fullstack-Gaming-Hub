@@ -2,12 +2,13 @@ import "./GameCard.css"
 interface GameCardProps {
     title: string;
     emulator: string;
-    cover: string
+    cover: string;
+    executablePath: string
 }
 
 function GameCard({ title, emulator, cover }: GameCardProps) {
     return (
-        <header className="game-card">
+        <div className="game-card">
             <img src={cover} alt={`Capa do jogo ${title}`} />
 
             <h1>{title}</h1>
@@ -15,7 +16,7 @@ function GameCard({ title, emulator, cover }: GameCardProps) {
             <p>{emulator}</p>
 
             <button>Jogar</button>
-        </header>
+        </div>
     )
 }
 

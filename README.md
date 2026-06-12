@@ -10,6 +10,9 @@ The project is in initial state of development
 - React
 - TypeScript
 - Vite
+- Python
+- FastAPI
+- IGDB (Twitch)
 
 ## Current Features
 
@@ -17,11 +20,13 @@ The project is in initial state of development
 - Game Cards
 - Platform Sections
 - Search Bar (UI)
+- Game file scan (multi-folder)
+- Cover fetch via IGDB
+- FastAPI Backend
 
 ## Roadmap
 
-- Search System
-- Emulator Integration
+- Search System (frontend + backend connected)
+- Emulator Integration (launch games)
 - SQLite Database
-- FastAPI Backend
-- Desktop Version
+- Desktop Version (Electron/Tauri)
