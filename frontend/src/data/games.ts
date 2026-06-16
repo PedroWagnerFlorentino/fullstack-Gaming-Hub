@@ -6,27 +6,35 @@ export const games: Game[] = [
         title: "God of War",
         platform: "Plastation2",
         emulator: "Ps2",
-        cover: ""
+        cover: "",
+        gameRom: "",
+        emulatorPath: ""
     },
     {
         id: 2,
         title: "Pokemon Sword",
         platform: "Nintendo Switch",
         emulator: "Switch",
-        cover: ""
+        cover: "",
+        gameRom: "",
+        emulatorPath: ""
     },
     {
         id: 3,
         title: "Scaler",
         platform: "Plastation2",
         emulator: "Ps2",
-        cover: ""
+        cover: "",
+        gameRom: "",
+        emulatorPath: ""
     },
     {
         id: 4,
         title: "Mario Odsei",
         platform: "Nintendo Switch",
         emulator: "Switch",
-        cover: ""
+        cover: "",
+        gameRom: "",
+        emulatorPath: ""
     }
 ];

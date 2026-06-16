@@ -1,5 +1,8 @@
+import type { Dispatch, SetStateAction } from "react"
+
+
 interface SearchBarProps {
-    setSearch: (value: string) => void
+    setSearch: Dispatch<SetStateAction<string>>
 };
 
 

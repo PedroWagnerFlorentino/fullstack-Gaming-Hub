@@ -1,13 +1,38 @@
 import GameCard from "../components/GameCard"
-import getGames from "../services/gameServices"
+import { getGames } from "../services/gameServices"
+import type { Game } from "../types/Games"
+import { useEffect, useState } from "react"
 
 interface LibraryProps {
     gameSection: string //representa a secao que tem que mostrar os jogos, ex: ps2, switch, p1, etc
     search: string
+    folders: string[]
+    sent: boolean
 }
-function Library({ gameSection, search }: LibraryProps) {
 
-    const games = getGames();
+
+function Library({ gameSection, search, folders, sent }: LibraryProps) {
+
+    const [games, setGames] = useState<Game[]>([])
+    const [loading, setLoading] = useState(true)
+
+
+    useEffect(() => {
+        if (!sent) return // caso nenhuma pasta for envivada já retorna
+
+        setLoading(true)
+        const buscarDados = async () => {
+            try {
+                const dadosJson = await getGames(folders)
+                setGames(dadosJson);
+                setLoading(false)
+            }
+            catch (error) {
+                console.error(`Erro ao varrer pasta ${error}`)
+            }
+        }
+        buscarDados()
+    }, [sent]) //atualiza quando sent muda
 
     const filteredGames = games.filter((game) =>
         game.title.toLowerCase().includes(search.toLowerCase()) // se o titulo do jogo estiver na pesquisa ele vai para a variavel
@@ -15,50 +40,24 @@ function Library({ gameSection, search }: LibraryProps) {
 
     const baseList = search !== "" ? filteredGames : games
 
-    const ps2games = baseList.filter(
-        game => game.platform === "Plastation2"
-    );
-    const nsGames = baseList.filter(
-        game => game.platform === "Nintendo Switch"
-    );
+    const displayList = gameSection === "all" ? baseList : baseList.filter(game => game.platform === gameSection)
 
-    if (gameSection === "all") {
+    if (loading && sent) {
+        return <p>Loading ...</p>
+    }
+
+    if (displayList) {
         return (
-            baseList.map((game) => (
+            displayList.map((game) => (
                 <GameCard
                     title={game.title}
                     emulator={game.emulator}
                     cover={game.cover}
-                    executablePath=""
-                />
-            ))
-        )
-    };
-    if (gameSection === "ps2") {
-        return (
-            ps2games.map((game) => (
-
-                <GameCard
-                    title={game.title}
-                    emulator={game.emulator}
-                    cover={game.cover}
-                    executablePath=""
-                />
-            ))
-        )
-    };
-    if (gameSection === "switch") {
-        return (
-            nsGames.map((game) => (
-
-                <GameCard
-                    title={game.title}
-                    emulator={game.emulator}
-                    cover={game.cover}
-                    executablePath=""
-                />
-            ))
+                    executablePath={game.gameRom}
+                />))
         )
     }
+    
+    return null
 }
 export default Library;

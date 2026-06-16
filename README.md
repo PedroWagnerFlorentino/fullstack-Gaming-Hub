@@ -20,13 +20,15 @@ The project is in initial state of development
 - Game Cards
 - Platform Sections
 - Search Bar (UI)
+- Folder input
 - Game file scan (multi-folder)
 - Cover fetch via IGDB
 - FastAPI Backend
 
 ## Roadmap
 
-- Search System (frontend + backend connected)
 - Emulator Integration (launch games)
 - SQLite Database
+- Frontend Visual
 - Desktop Version (Electron/Tauri)
+- Better User Experience

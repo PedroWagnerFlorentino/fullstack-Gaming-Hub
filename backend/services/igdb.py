@@ -30,7 +30,12 @@ def get_cover(game_title: str) -> str:
         data=f'search "{game_title}"; fields name,cover.url; limit 1;'
     )
 
-    url = response.json()[0]["cover"]["url"]  # pega a url recebida e troca o tamanho da imagem
+    data = response.json()
+
+    if not data or not data[0].get("cover"):
+        return ""
+
+    url = data[0]["cover"]["url"]  # pega a url recebida e troca o tamanho da imagem
     url = url.replace("t_thumb", "t_cover_big")
     url = "https:" + url
     return url
