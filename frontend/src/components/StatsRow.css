@@ -1,0 +1,36 @@
+.stats-row {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  padding: 0 48px;
+  margin: 8px 0 4px;
+}
+
+.stats-row__card {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 20px 48px 20px 24px;
+  background: linear-gradient(135deg, rgba(41, 121, 255, 0.12), rgba(0, 176, 255, 0.06));
+  border: 1px solid rgba(41, 121, 255, 0.25);
+  border-radius: 12px;
+  min-width: 150px;
+  margin-right: 16px;
+}
+
+.stats-row__value {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--blue);
+  line-height: 1;
+  letter-spacing: -0.5px;
+}
+
+.stats-row__label {
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: var(--text);
+  opacity: 0.5;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}

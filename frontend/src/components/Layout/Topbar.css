@@ -1,0 +1,136 @@
+/* ── TOPBAR ── */
+.topbar {
+  height: var(--topbar-h);
+  background: rgba(10, 14, 26, 0.96);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 0 18px;
+  flex-shrink: 0;               /* não encolhe quando a página rola */
+  position: relative;
+  z-index: 100;
+  backdrop-filter: blur(10px);  /* efeito vidro fosco na topbar */
+}
+
+/* LOGO */
+.topbar__logo {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  flex-shrink: 0;
+}
+
+.topbar__logo-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 7px;
+  /* gradiente diagonal do azul pro cyan */
+  background: linear-gradient(135deg, var(--blue), var(--cyan));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 700;
+  font-size: 15px;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.topbar__logo-text {
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 700;
+  font-size: 17px;
+  letter-spacing: 1px;
+  color: var(--text);
+  white-space: nowrap;
+}
+
+/* SEARCH */
+.topbar__search {
+  flex: 1;
+  max-width: 340px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0 12px;
+  height: 34px;
+  transition: border-color var(--transition);
+}
+
+/* quando o usuário clica na search, a borda acende */
+.topbar__search:focus-within {
+  border-color: var(--blue);
+}
+
+.topbar__search-icon {
+  font-size: 13px;
+  flex-shrink: 0;
+  opacity: 0.6;
+}
+
+.topbar__search input {
+  background: none;
+  color: var(--text);
+  font-size: 13px;
+  flex: 1;
+  width: 100%;
+}
+
+.topbar__search input::placeholder {
+  color: var(--text-3);
+}
+
+/* ACTIONS */
+.topbar__actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-left: auto;
+}
+
+/* SCAN BTN */
+.topbar__scan-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: var(--radius);
+  background: var(--blue-dim);
+  border: 1px solid var(--border);
+  color: var(--text-2);
+  font-size: 12px;
+  font-weight: 500;
+  transition: all var(--transition);
+}
+
+.topbar__scan-btn:hover:not(:disabled) {
+  background: rgba(41, 121, 255, 0.25);
+  border-color: var(--blue);
+  color: var(--text);
+}
+
+.topbar__scan-btn--loading {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* AVATAR */
+.topbar__avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--blue-2), var(--cyan));
+  border: 1.5px solid var(--blue);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 600;
+  color: #fff;
+  cursor: pointer;
+  flex-shrink: 0;
+}

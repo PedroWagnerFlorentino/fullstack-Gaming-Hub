@@ -1,0 +1,173 @@
+/* ── SIDEBAR ── */
+.sidebar {
+  width: var(--sidebar-open);       /* 220px quando aberta */
+  background: var(--navy-2);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  padding: 12px 8px;
+  gap: 2px;
+  flex-shrink: 0;
+  overflow: hidden;
+  /* transition na WIDTH — é o que cria a animação de colapsar */
+  transition: width var(--transition);
+}
+
+/* quando data-collapsed="true", encolhe pra 56px */
+.sidebar[data-collapsed="true"] {
+  width: var(--sidebar-closed);     /* 56px */
+}
+
+/* ── SECTION LABEL (ex: "Menu") ── */
+.sidebar__section-label {
+  font-size: 9px;
+  letter-spacing: 1.8px;
+  text-transform: uppercase;
+  color: var(--text-3);
+  padding: 6px 10px 3px;
+  white-space: nowrap;
+  display: block;
+  font-family: 'Rajdhani', sans-serif;
+  /* transition em opacity — some suavemente ao colapsar */
+  transition: opacity var(--transition);
+}
+
+.sidebar[data-collapsed="true"] .sidebar__section-label {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ── NAV ── */
+.sidebar__nav {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.sidebar__nav--bottom {
+  margin-top: auto;   /* empurra pra baixo com flexbox */
+}
+
+/* ── ITEM ── */
+.sidebar__item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 10px;
+  border-radius: var(--radius);
+  color: var(--text-2);
+  font-size: 13px;
+  font-weight: 400;
+  white-space: nowrap;
+  width: 100%;
+  text-align: left;
+  position: relative;
+  transition: background var(--transition), color var(--transition);
+}
+
+.sidebar__item:hover {
+  background: rgba(41, 121, 255, 0.10);
+  color: var(--text);
+}
+
+/* item ativo: fundo azul + barra lateral */
+.sidebar__item--active {
+  background: rgba(41, 121, 255, 0.18);
+  color: var(--blue);
+  font-weight: 500;
+}
+
+/*
+  A barrinha azul à esquerda do item ativo.
+  Usamos ::before (pseudo-elemento) pra não precisar
+  de um elemento HTML extra só pra decoração.
+*/
+.sidebar__item--active::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 22%;
+  bottom: 22%;
+  width: 3px;
+  border-radius: 0 3px 3px 0;
+  background: var(--blue);
+  /* glow azul na barrinha */
+  box-shadow: 0 0 8px var(--blue-glow);
+}
+
+/* ── ÍCONE ── */
+.sidebar__icon {
+  font-size: 17px;
+  width: 20px;
+  text-align: center;
+  flex-shrink: 0;   /* nunca encolhe mesmo quando a sidebar colapsa */
+  line-height: 1;
+}
+
+/* ── LABEL ── */
+.sidebar__label {
+  overflow: hidden;
+  white-space: nowrap;
+  transition: opacity var(--transition), max-width var(--transition);
+  max-width: 200px;
+}
+
+/*
+  Ao colapsar: some o label com opacity + max-width.
+  Só tirar display:none não funciona porque não dá pra animar.
+  O truque é animar max-width de 200px → 0 junto com opacity.
+*/
+.sidebar[data-collapsed="true"] .sidebar__label {
+  opacity: 0;
+  max-width: 0;
+  pointer-events: none;
+}
+
+/* ── BADGE ── */
+.sidebar__badge {
+  margin-left: auto;
+  background: var(--blue-2);
+  color: #fff;
+  font-size: 10px;
+  padding: 1px 6px;
+  border-radius: 10px;
+  flex-shrink: 0;
+  transition: opacity var(--transition);
+}
+
+.sidebar[data-collapsed="true"] .sidebar__badge {
+  opacity: 0;
+}
+
+/* ── DIVIDER ── */
+.sidebar__divider {
+  height: 1px;
+  background: var(--border);
+  margin: 6px 8px;
+}
+
+/* ── TOGGLE BUTTON ── */
+.sidebar__toggle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 10px;
+  border-radius: var(--radius);
+  color: var(--text-3);
+  font-size: 13px;
+  border-top: 1px solid var(--border);
+  margin-top: 4px;
+  width: 100%;
+  transition: color var(--transition), background var(--transition);
+}
+
+.sidebar__toggle:hover {
+  color: var(--blue);
+  background: rgba(41, 121, 255, 0.08);
+}
+
+/* A seta do toggle é maior pra ser mais clicável */
+.sidebar__toggle .sidebar__icon {
+  font-size: 20px;
+  font-weight: 300;
+}

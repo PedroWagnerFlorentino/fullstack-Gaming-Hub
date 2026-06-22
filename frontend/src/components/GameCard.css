@@ -1,5 +1,142 @@
-.game-card{
-    width: 220px;
-    border-radius: 12px;
-    overflow: hidden;
+/* ── GAME CARD ── */
+.game-card {
+  flex-shrink: 0;
+  width: 110px;
+  cursor: pointer;
+  /*
+    O hover do card inteiro dispara os efeitos da capa e do overlay.
+    Fazemos isso com CSS puro: .game-card:hover .game-card__cover
+    Isso é mais performático do que usar onMouseEnter com useState.
+  */
+}
+
+/* ── CAPA ── */
+.game-card__cover {
+  width: 110px;
+  height: 150px;
+  border-radius: var(--radius);
+  background: var(--card-bg-2);
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
+  /*
+    transition dupla: transform (levita) + box-shadow (glow)
+    O transform é o que cria o efeito de "levantar" o card no hover.
+  */
+  transition:
+    transform var(--transition),
+    box-shadow var(--transition),
+    border-color var(--transition);
+}
+
+/* HOVER: card levanta e acende o glow azul */
+.game-card:hover .game-card__cover {
+  transform: translateY(-6px) scale(1.04);
+  box-shadow:
+    0 14px 35px rgba(0, 0, 0, 0.55),
+    0 0 20px var(--blue-glow);
+  border-color: var(--border-hover);
+}
+
+.game-card__cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /*
+    pointer-events: none evita que a imagem
+    "roube" o evento de hover do container pai
+  */
+  pointer-events: none;
+}
+
+.game-card__cover-fallback {
+  font-size: 36px;
+  pointer-events: none;
+}
+
+/* ── BADGE DE PLATAFORMA ── */
+.game-card__platform {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  background: rgba(0, 0, 0, 0.85);
+  color: var(--cyan);
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  padding: 2px 5px;
+  border-radius: 4px;
+  font-family: 'Rajdhani', sans-serif;
+  pointer-events: none;
+}
+
+/* ── OVERLAY DE HOVER ── */
+.game-card__overlay {
+  position: absolute;
+  inset: 0;
+  /*
+    Gradiente transparente no topo → escuro na base.
+    O botão "Jogar" fica na parte escura, assim é legível.
+  */
+  background: linear-gradient(180deg, transparent 40%, rgba(0, 0, 0, 0.85) 100%);
+  display: flex;
+  align-items: flex-end;
+  padding: 8px;
+  /*
+    opacity: 0 → invisível por padrão
+    transition faz ele aparecer suavemente no hover
+  */
+  opacity: 0;
+  transition: opacity var(--transition);
+}
+
+/* Quando o card pai tem hover, o overlay aparece */
+.game-card:hover .game-card__overlay {
+  opacity: 1;
+}
+
+/* ── BOTÃO JOGAR (dentro do overlay) ── */
+.game-card__play-btn {
+  width: 100%;
+  background: rgba(41, 121, 255, 0.88);
+  color: #fff;
+  border-radius: 5px;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 5px;
+  text-align: center;
+  transition: background var(--transition);
+  font-family: 'Inter', sans-serif;
+}
+
+.game-card__play-btn:hover {
+  background: var(--blue);
+}
+
+/* ── INFO ── */
+.game-card__info {
+  padding: 7px 2px 0;
+}
+
+.game-card__title {
+  font-size: 11.5px;
+  font-weight: 500;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;  /* coloca "..." se o título for longo */
+  max-width: 110px;
+}
+
+.game-card__sub {
+  font-size: 10px;
+  color: var(--text-3);
+  margin-top: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 110px;
 }

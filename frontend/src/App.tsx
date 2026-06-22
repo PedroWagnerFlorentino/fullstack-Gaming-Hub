@@ -1,63 +1,48 @@
-import Header from "./components/Header"
-import Library from "./pages/Library"
-import SearchBar from "./components/SearchBar"
-import FolderInput from "./components/FolderInput"
+import "./index.css"
+import "./App.css"
+import { useState, useMemo } from "react"
+import type { ReactElement } from "react"
+import Topbar from "./components/Layout/Topbar"
+import Sidebar from "./components/Layout/Sidebar"
+import LibraryPage from "./pages/LibraryPage"
+import Settings from "./pages/Settings"
 
-import { useState } from "react"
+
 
 function App() {
+  const [search, setSearch] = useState("")
+  const [folders, setFolders] = useState<string[]>([])
+  const [sent, setSent] = useState(false)
+  const [activePage, setActivePage] = useState("library")
+  const [totalGamesSidebar, setTotalGamesSidebar] = useState<number | undefined>(undefined)
 
-    const [search, setSearch] = useState("")
-    const [folders, setFolders] = useState<string[]>([])
-    const [sent, setSent] = useState(false)
+  const PAGES = useMemo<Record<string, ReactElement>>(() => ({
+    library: <LibraryPage search={search} folders={folders} sent={sent} onTotalGamesChange={setTotalGamesSidebar} />,
+    settings: <Settings setFolders={setFolders} setSent={setSent} />
+  }), [search, folders, sent, totalGamesSidebar])
 
+  
+  return (
+    <div className="app">
+      <Topbar
+        search={search}
+        setSearch={setSearch}
+      />
 
+      <div className="app__body">
+        <Sidebar
+          activePage={activePage}
+          onNavigate={setActivePage}
+          gameCount={totalGamesSidebar}
+        />
 
-    return (
-        <>
-            <div>
-                <Header
-                    title="Gaming Hub"
-                />
-            </div>
+        <main className="app__content">
+          {PAGES[activePage] ?? PAGES["library"]}
 
-
-            <div>
-                <FolderInput setFolder={setFolders} setSent={setSent} ></FolderInput>
-            </div>
-
-
-            <div>
-                <SearchBar setSearch={setSearch}></SearchBar>
-            </div>
-
-            <div>
-                <h1>All Games</h1>
-                <Library
-                    gameSection="all"
-                    search={search}
-                    folders={folders}
-                    sent={sent}>            
-                </Library>
-
-                <h1>PS2 Games </h1>
-                <Library
-                    gameSection="Playstation2"
-                    search={search}
-                    folders={folders}
-                    sent={sent}>
-                </Library>
-
-                <h1>Switch Games</h1>
-                <Library
-                    gameSection="Nintendo Switch"
-                    search={search}
-                    folders={folders}
-                    sent={sent}>
-                </Library>
-            </div>
-        </>
-    );
+        </main>
+      </div>
+    </div>
+  )
 }
 
-export default App;
+export default App

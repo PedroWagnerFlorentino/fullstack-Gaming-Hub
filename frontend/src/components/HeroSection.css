@@ -1,0 +1,199 @@
+/* ── HERO ── */
+.hero {
+  height: 260px;
+  position: relative;
+  background: var(--navy);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+/* ── ESTADO VAZIO ── */
+.hero--empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1px solid var(--border);
+}
+
+.hero__empty-text {
+  color: var(--text-3);
+  font-size: 14px;
+}
+
+/* ── DECORAÇÕES DE FUNDO ── */
+
+/*
+  Grade: usamos background-image com dois gradientes lineares
+  pra criar linhas horizontais e verticais sem nenhum elemento HTML extra.
+  A opacidade é baixa (0.04) pra ser sutil.
+*/
+.hero__grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(41, 121, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(41, 121, 255, 0.04) 1px, transparent 1px);
+  background-size: 34px 34px;
+}
+
+/*
+  Glow: radial-gradient cria o brilho azul difuso no canto direito.
+  Isso dá profundidade sem ser pesado.
+*/
+.hero__glow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse at 75% 40%,
+    rgba(41, 121, 255, 0.10) 0%,
+    transparent 65%
+  );
+}
+
+/*
+  Fade: gradiente que vai do transparente pro fundo navy.
+  Cria a ilusão de que o hero "dissolve" nas rows abaixo.
+*/
+.hero__fade {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 90px;
+  background: linear-gradient(transparent, var(--navy));
+  z-index: 1;
+}
+
+/* ── CONTEÚDO ── */
+.hero__content {
+  position: relative;
+  z-index: 2;           /* fica na frente das decorações */
+  height: 100%;
+  display: flex;
+  align-items: flex-end;  /* ancora tudo na parte de baixo */
+  padding: 0 28px 26px;
+  gap: 24px;
+}
+
+/* ── CAPA ── */
+.hero__cover {
+  width: 130px;
+  height: 175px;
+  border-radius: 10px;
+  background: var(--card-bg-2);
+  border: 1px solid var(--border-hover);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  overflow: hidden;
+  /* sombra dupla: escura embaixo + glow azul */
+  box-shadow:
+    0 12px 40px rgba(0, 0, 0, 0.6),
+    0 0 24px rgba(41, 121, 255, 0.15);
+}
+
+.hero__cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;    /* recorta a imagem pra preencher o quadro */
+}
+
+.hero__cover-fallback {
+  font-size: 44px;
+}
+
+/* ── INFO ── */
+.hero__info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+/* TAG "Último jogado" */
+.hero__tag {
+  display: inline-block;
+  background: rgba(41, 121, 255, 0.18);
+  border: 1px solid rgba(41, 121, 255, 0.35);
+  color: var(--cyan);
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  border-radius: 4px;
+  margin-bottom: 8px;
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 600;
+}
+
+/* TÍTULO — fonte display pra impacto */
+.hero__title {
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 700;
+  font-size: 30px;
+  line-height: 1.1;
+  color: var(--text);
+  margin-bottom: 6px;
+  /* limita a 2 linhas com reticências */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* META (plataforma, emulador...) */
+.hero__meta {
+  color: var(--text-2);
+  font-size: 12px;
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* ── BOTÕES ── */
+.hero__buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.hero__btn-primary {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--blue);
+  color: #fff;
+  border-radius: var(--radius);
+  padding: 8px 20px;
+  font-size: 13px;
+  font-weight: 600;
+  /* glow azul no botão principal */
+  box-shadow: 0 4px 18px rgba(41, 121, 255, 0.40);
+  transition: all var(--transition);
+}
+
+.hero__btn-primary:hover {
+  background: #3d8aff;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 24px rgba(41, 121, 255, 0.50);
+}
+
+.hero__btn-secondary {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.07);
+  color: var(--text);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  border-radius: var(--radius);
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 500;
+  transition: all var(--transition);
+}
+
+.hero__btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.20);
+}

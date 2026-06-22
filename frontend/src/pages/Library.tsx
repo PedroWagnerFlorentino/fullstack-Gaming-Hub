@@ -1,63 +1,86 @@
 import GameCard from "../components/GameCard"
-import { getGames } from "../services/gameServices"
 import type { Game } from "../types/Games"
-import { useEffect, useState } from "react"
+import "./Library.css"
 
 interface LibraryProps {
-    gameSection: string //representa a secao que tem que mostrar os jogos, ex: ps2, switch, p1, etc
-    search: string
-    folders: string[]
-    sent: boolean
+  loading: boolean
+  games: Game[]
+  displayViewMode: string
+  title?: string          // título da seção ex: "Nintendo Switch"
 }
 
+function Library({ games, displayViewMode, title, loading }: LibraryProps) {
 
-function Library({ gameSection, search, folders, sent }: LibraryProps) {
+  // Não renderiza a seção se não tiver jogos 
+  if (!loading && games.length === 0) return null
 
-    const [games, setGames] = useState<Game[]>([])
-    const [loading, setLoading] = useState(true)
+  return (
+    <section className="library-row">
+
+      {/* CABEÇALHO DA SEÇÃO */}
+      <div className="library-row__header">
+        <h2 className="library-row__title">
+          <span className="library-row__accent">▍</span>
+          {title}
+          {!loading && (
+            <span className="library-row__count">{games.length} jogos</span>
+          )}
+        </h2>
+      </div>
 
 
-    useEffect(() => {
-        if (!sent) return // caso nenhuma pasta for envivada já retorna
+      {/* LOADING */}
+      {loading && (
+        <div className="library-row__loading">
+          <div className="library-row__skeleton" />
+          <div className="library-row__skeleton" />
+          <div className="library-row__skeleton" />
+          <div className="library-row__skeleton" />
+        </div>
+      )}
 
-        setLoading(true)
-        const buscarDados = async () => {
-            try {
-                const dadosJson = await getGames(folders)
-                setGames(dadosJson);
-                setLoading(false)
+      {/* CARDS — scroll horizontal */}
+      {!loading && (
+        <div
+          className={displayViewMode === "rows" ? "library-row__cards" : "library-row__grid"}
+          /*
+            drag-to-scroll: feito com JS inline (onMouseDown etc)
+            pra não precisar de uma biblioteca pra isso
+          */
+          onMouseDown={displayViewMode === "rows" ? (e) => {
+            const el = e.currentTarget
+            let startX = e.pageX - el.offsetLeft
+            let scrollLeft = el.scrollLeft
+            let dragging = true
+
+            const onMove = (ev: MouseEvent) => {
+              if (!dragging) return
+              const x = ev.pageX - el.offsetLeft
+              el.scrollLeft = scrollLeft - (x - startX) * 1.2
             }
-            catch (error) {
-                console.error(`Erro ao varrer pasta ${error}`)
-            }
-        }
-        buscarDados()
-    }, [sent]) //atualiza quando sent muda
+            const onUp = () => { dragging = false }
 
-    const filteredGames = games.filter((game) =>
-        game.title.toLowerCase().includes(search.toLowerCase()) // se o titulo do jogo estiver na pesquisa ele vai para a variavel
-    );
+            window.addEventListener("mousemove", onMove)
+            window.addEventListener("mouseup", onUp, { once: true })
+          }
+            : undefined
+          }
+        >
+          {games.map(game => (
+            <GameCard
+              key={game.id ?? game.title}
+              title={game.title}
+              emulator={game.emulator}
+              cover={game.cover}
+              executablePath={game.gameRom}
+              platform={game.platform}
+            />
+          ))}
+        </div>
+      )}
 
-    const baseList = search !== "" ? filteredGames : games
-
-    const displayList = gameSection === "all" ? baseList : baseList.filter(game => game.platform === gameSection)
-
-    if (loading && sent) {
-        return <p>Loading ...</p>
-    }
-
-    if (displayList) {
-        return (
-            displayList.map((game) => (
-                <GameCard
-                    title={game.title}
-                    emulator={game.emulator}
-                    cover={game.cover}
-                    executablePath={game.gameRom}
-                />))
-        )
-    }
-    
-    return null
+    </section>
+  )
 }
-export default Library;
+
+export default Library
