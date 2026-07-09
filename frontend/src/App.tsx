@@ -11,15 +11,12 @@ import Settings from "./pages/Settings"
 
 function App() {
   const [search, setSearch] = useState("")
-  const [folders, setFolders] = useState<string[]>([])
-  const [sent, setSent] = useState(false)
   const [activePage, setActivePage] = useState("library")
-  const [totalGamesSidebar, setTotalGamesSidebar] = useState<number | undefined>(undefined)
 
   const PAGES = useMemo<Record<string, ReactElement>>(() => ({
-    library: <LibraryPage search={search} folders={folders} sent={sent} onTotalGamesChange={setTotalGamesSidebar} />,
-    settings: <Settings setFolders={setFolders} setSent={setSent} />
-  }), [search, folders, sent, totalGamesSidebar])
+    library: <LibraryPage search={search} />,
+    settings: <Settings/>
+  }), [search])
 
   
   return (
@@ -33,7 +30,6 @@ function App() {
         <Sidebar
           activePage={activePage}
           onNavigate={setActivePage}
-          gameCount={totalGamesSidebar}
         />
 
         <main className="app__content">

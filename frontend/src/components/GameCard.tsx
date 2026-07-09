@@ -14,9 +14,10 @@ interface GameCardProps {
   cover: string
   executablePath: string
   platform?: string
+  onPlay: () => void
 }
 
-function GameCard({ title, emulator, cover, platform }: GameCardProps) {
+function GameCard({title, emulator, cover, platform, onPlay }: GameCardProps) {
   return (
     <div className="game-card">
 
@@ -40,7 +41,7 @@ function GameCard({ title, emulator, cover, platform }: GameCardProps) {
           Sem nenhum JS ou useState!
         */}
         <div className="game-card__overlay">
-          <button className="game-card__play-btn">▶ Jogar</button>
+          <button className="game-card__play-btn" onClick={() => onPlay()}>▶ Jogar</button>
         </div>
 
       </div>

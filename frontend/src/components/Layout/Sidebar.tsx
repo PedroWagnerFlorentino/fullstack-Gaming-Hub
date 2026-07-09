@@ -9,6 +9,7 @@
 
 import { useState } from "react"
 import "./Sidebar.css"
+import { useGames } from "../../context/GamesContext"
 
 interface NavItem {
   icon: string
@@ -17,24 +18,23 @@ interface NavItem {
 }
 
 const NAV_MAIN: NavItem[] = [
-  { icon: "🎮", label: "Biblioteca",  id: "library"   },
-  { icon: "⭐", label: "Favoritos",   id: "favorites" },
+  { icon: "🎮", label: "Biblioteca", id: "library" },
+  { icon: "⭐", label: "Favoritos", id: "favorites" },
 ]
 
 const NAV_BOTTOM: NavItem[] = [
-  { icon: "📁", label: "Pastas",        id: "folders"  },
+  { icon: "📁", label: "Pastas", id: "folders" },
   { icon: "⚙️", label: "Configurações", id: "settings" },
 ]
 
 interface SidebarProps {
   activePage: string
   onNavigate: (id: string) => void
-  gameCount?: number
 }
 
-function Sidebar({ activePage, onNavigate, gameCount }: SidebarProps) {
+function Sidebar({ activePage, onNavigate }: SidebarProps) {
   const [collapsed, setCollapsed] = useState(false)
-
+  const { allGames } = useGames()
   return (
     /*
       data-collapsed é um atributo HTML que o CSS usa como seletor.
@@ -57,8 +57,8 @@ function Sidebar({ activePage, onNavigate, gameCount }: SidebarProps) {
             <span className="sidebar__label">{item.label}</span>
 
             {/* Badge com total de jogos — só na Biblioteca */}
-            {item.id === "library" && gameCount != null && (
-              <span className="sidebar__badge">{gameCount}</span>
+            {item.id === "library" && allGames.length != null && (
+              <span className="sidebar__badge">{allGames.length}</span>
             )}
           </button>
         ))}

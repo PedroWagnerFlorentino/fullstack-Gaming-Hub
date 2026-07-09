@@ -7,12 +7,14 @@ interface LibraryProps {
   games: Game[]
   displayViewMode: string
   title?: string          // título da seção ex: "Nintendo Switch"
+  onPlay: (game: Game) => void
 }
 
-function Library({ games, displayViewMode, title, loading }: LibraryProps) {
+function Library({ games, displayViewMode, title, loading, onPlay }: LibraryProps) {
 
   // Não renderiza a seção se não tiver jogos 
   if (!loading && games.length === 0) return null
+
 
   return (
     <section className="library-row">
@@ -67,13 +69,15 @@ function Library({ games, displayViewMode, title, loading }: LibraryProps) {
           }
         >
           {games.map(game => (
+
             <GameCard
               key={game.id ?? game.title}
               title={game.title}
               emulator={game.emulator}
               cover={game.cover}
-              executablePath={game.gameRom}
+              executablePath={game.rom_path}
               platform={game.platform}
+              onPlay={() => onPlay(game)}
             />
           ))}
         </div>

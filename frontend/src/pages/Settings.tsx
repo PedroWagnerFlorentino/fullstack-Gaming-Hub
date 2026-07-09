@@ -1,20 +1,10 @@
 import "./Settings.css"
 import FolderInput from "../components/FolderInput"
-import type { Dispatch, SetStateAction } from "react"
+import EmulatorManager from "../components/EmulatorManager"
 
-const EMULATORS = [ //lista temporatia até o mapeamento dos emuladores
-    { platform: "Nintendo Switch", emulator: "Yuzu" },
-    { platform: "PlayStation 2", emulator: "PCSX2" },
-    { platform: "Nintendo 64", emulator: "Project64" },
-    { platform: "Game Boy Advance", emulator: "mGBA" },
-]
 
-interface SettingsProps {
-    setFolders: Dispatch<SetStateAction<string[]>>
-    setSent: Dispatch<SetStateAction<boolean>>
-}
+function Settings() {
 
-function Settings({ setFolders, setSent }: SettingsProps) {
     return (
         <div className="settings">
             <h1 className="settings__title">Configurações</h1>
@@ -25,10 +15,7 @@ function Settings({ setFolders, setSent }: SettingsProps) {
                 </div>
                 <div className="settings__card">
                     <div className="settings__folder-input">
-                        <FolderInput
-                            setFolder={setFolders}
-                            setSent={setSent}
-                        />
+                        <FolderInput/>
                     </div>
                 </div>
             </section>
@@ -38,12 +25,7 @@ function Settings({ setFolders, setSent }: SettingsProps) {
                     <h2>Emuladores</h2>
                 </div>
                 <div className="settings__emulator-list">
-                    {EMULATORS.map(({ platform, emulator }) => (
-                        <div className="settings__emulator-item" key={platform}>
-                            <span className="settings__emulator-platform">{platform}</span>
-                            <span className="settings__emulator-badge">{emulator}</span>
-                        </div>
-                    ))}
+                    <EmulatorManager/>
                 </div>
             </section>
 
@@ -56,7 +38,7 @@ function Settings({ setFolders, setSent }: SettingsProps) {
                     </div>
                     <div className="settings__about-item">
                         <span className="settings__about-label">Versão</span>
-                        <span className="settings__about-value">0.4.1</span>
+                        <span className="settings__about-value">0.6</span>
                     </div>
                     <div className="settings__about-item">
                         <span className="settings__about-label">Autor</span>

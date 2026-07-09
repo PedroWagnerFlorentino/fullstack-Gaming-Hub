@@ -4,8 +4,9 @@ import HeroSection from "../components/HeroSection"
 import StatRow from "../components/StatsRow"
 import Library from "./Library"
 import type { Game } from "../types/Games"
-import type { Dispatch, SetStateAction } from "react"
-import { postGames, getGames } from "../services/gameServices"
+import { launchGame } from "../services/gameServices"
+import { useGames } from "../context/GamesContext"
+
 
 // Seções de plataforma — adiciona novas aqui quando quiser
 const PLATFORMS = [
@@ -20,70 +21,33 @@ const PLATFORMS = [
 
 interface LibraryPageProps {
     search: string
-    folders: string[]
-    sent: boolean
-    onTotalGamesChange?: Dispatch<SetStateAction<number | undefined>>
 }
 
-function LibraryPage({ search, folders, sent, onTotalGamesChange }: LibraryPageProps) {
-
+function LibraryPage({ search }: LibraryPageProps) {
+    
+    const { allGames, loading, fetchGames } = useGames()
+    
     const [heroGame, setHeroGame] = useState<Game | null>(null)
-    const [totalPlatforms, setTotalPlatforms] = useState<number | undefined>(undefined)
-    const [totalGames, setTotalGames] = useState<number | undefined>(undefined)
     const [displayViewMode, setDisplayMode] = useState("rows")
-    const [loading, setLoading] = useState(true)
-    const [allGames, setGames] = useState<Game[]>([])
     const [gridFilter, setFilter] = useState("all")
-
-
-    // Quando o Library carrega os jogos, pega o primeiro pra exibir no hero
-    const handleGamesLoaded = (games: Game[]) => {
-        onTotalGamesChange?.(games.length)
-        setTotalGames(games.length)
-        setTotalPlatforms(new Set(games.map(game => game.platform)).size)
-        if (!heroGame && games.length > 0) {
-            setHeroGame(games[0])
-        }
-    }
+    const totalPlatforms = new Set(allGames.map(game => game.platform)).size
+    
 
     const handlePlay = (game: Game) => {
         // A chamada pro backend de launch vai aqui no Sprint 5
-        console.log("Jogar:", game.title, game.gameRom)
+        launchGame(game.id)
     }
 
-    // ── BUSCA INICIAL (GET) ─────────────────────────
-    useEffect(() => {
-        setLoading(true)
-        const buscarJogos = async () => {
-            try {
-                const dadosJson = await getGames()
-                setGames(dadosJson)
-                handleGamesLoaded(dadosJson)   // avisa o App do total de jogos
-            } catch (error) {
-                console.error(`Erro ao buscar jogos: ${error}`)
-            } finally {
-                setLoading(false)
-            }
-        }
-        buscarJogos()
-    }, [])
+    // Disparar o fetch sempre que a página é montada
+    useEffect(() => { fetchGames() }, [])
 
-    // ── SCAN DE PASTA (POST) ────────────────────────
     useEffect(() => {
-        if (!sent) return
-        setLoading(true)
-        const buscarDados = async () => {
-            try {
-                const dadosJson = await postGames(folders)
-                setGames(dadosJson)
-            } catch (error) {
-                console.error(`Erro ao varrer pasta: ${error}`)
-            } finally {
-                setLoading(false)
-            }
+        if (!heroGame && allGames.length > 0) {
+            setHeroGame(allGames[0])
         }
-        buscarDados()
-    }, [sent])
+    }, [allGames])
+    
+    
 
     const filteredGames = allGames.filter(game =>
         game.title.toLowerCase().includes(search.toLowerCase()))
@@ -98,7 +62,7 @@ function LibraryPage({ search, folders, sent, onTotalGamesChange }: LibraryPageP
             />
 
             <StatRow
-                totalGames={totalGames}
+                totalGames={allGames.length}
                 totalPlatforms={totalPlatforms}
             />
 
@@ -137,6 +101,7 @@ function LibraryPage({ search, folders, sent, onTotalGamesChange }: LibraryPageP
                             displayViewMode={displayViewMode}
                             games={section === "all" ? filteredGames : filteredGames.filter(game => game.platform === section)}
                             loading={loading}
+                            onPlay={handlePlay}
                         />))
 
                 )
@@ -147,6 +112,7 @@ function LibraryPage({ search, folders, sent, onTotalGamesChange }: LibraryPageP
                         displayViewMode={displayViewMode}
                         games={gridFilter === "all" ? filteredGames : filteredGames.filter(game => game.platform === gridFilter)}
                         loading={loading}
+                        onPlay={handlePlay}
                     />
                 )
             }
