@@ -8,7 +8,7 @@
 */
 
 import { useState } from "react"
-import "./Sidebar.css"
+import "../componentsStyle/Sidebar.css"
 import { useGames } from "../../context/GamesContext"
 
 interface NavItem {

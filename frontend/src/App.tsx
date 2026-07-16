@@ -6,6 +6,7 @@ import Topbar from "./components/Layout/Topbar"
 import Sidebar from "./components/Layout/Sidebar"
 import LibraryPage from "./pages/LibraryPage"
 import Settings from "./pages/Settings"
+import Toast from "./components/Toast"
 
 
 
@@ -15,12 +16,13 @@ function App() {
 
   const PAGES = useMemo<Record<string, ReactElement>>(() => ({
     library: <LibraryPage search={search} />,
-    settings: <Settings/>
+    settings: <Settings />
   }), [search])
 
-  
   return (
     <div className="app">
+      <Toast/>
+
       <Topbar
         search={search}
         setSearch={setSearch}

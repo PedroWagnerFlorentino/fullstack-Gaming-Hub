@@ -6,7 +6,7 @@
   O overlay com o botão "Jogar" aparece via .game-card:hover .game-card__overlay
 */
 
-import "./GameCard.css"
+import "./componentsStyle/GameCard.css"
 
 interface GameCardProps {
   title: string

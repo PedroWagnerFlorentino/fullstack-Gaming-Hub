@@ -5,7 +5,7 @@
 */
 
 import type { Game } from "../types/Games"
-import "./HeroSection.css"
+import "./componentsStyle/HeroSection.css"
 
 interface HeroSectionProps {
   game: Game | null

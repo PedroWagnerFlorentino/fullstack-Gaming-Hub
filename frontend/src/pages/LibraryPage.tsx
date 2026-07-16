@@ -6,7 +6,7 @@ import Library from "./Library"
 import type { Game } from "../types/Games"
 import { launchGame } from "../services/gameServices"
 import { useGames } from "../context/GamesContext"
-
+import { useToast } from "../context/ToastContext"
 
 // Seções de plataforma — adiciona novas aqui quando quiser
 const PLATFORMS = [
@@ -24,30 +24,45 @@ interface LibraryPageProps {
 }
 
 function LibraryPage({ search }: LibraryPageProps) {
-    
+
+    const { clear, showError, showSuccess } = useToast()
     const { allGames, loading, fetchGames } = useGames()
-    
+
     const [heroGame, setHeroGame] = useState<Game | null>(null)
     const [displayViewMode, setDisplayMode] = useState("rows")
     const [gridFilter, setFilter] = useState("all")
     const totalPlatforms = new Set(allGames.map(game => game.platform)).size
-    
 
-    const handlePlay = (game: Game) => {
-        // A chamada pro backend de launch vai aqui no Sprint 5
-        launchGame(game.id)
+
+    const handlePlay = async (game: Game) => {
+        clear()
+        try {
+            await launchGame(game.id)
+            showSuccess("Jogo iniciando aguarde")
+        }
+        catch (error) {
+            showError(`Erro ao iniciar o jogo! Erro detalhado: ${error}`)
+        }
     }
 
     // Disparar o fetch sempre que a página é montada
-    useEffect(() => { fetchGames() }, [])
+    useEffect(() => {
+        clear()
+        try {
+            fetchGames()
+        }
+        catch (error) {
+            showError(`Erro ao buscar os jogos! Erro detalhado: ${error}`)
+        }
+    }, [])
 
     useEffect(() => {
         if (!heroGame && allGames.length > 0) {
             setHeroGame(allGames[0])
         }
     }, [allGames])
-    
-    
+
+
 
     const filteredGames = allGames.filter(game =>
         game.title.toLowerCase().includes(search.toLowerCase()))

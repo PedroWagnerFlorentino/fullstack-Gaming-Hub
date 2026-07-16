@@ -7,7 +7,7 @@
 */
 
 import type { Dispatch, SetStateAction } from "react"
-import "./Topbar.css"
+import "../componentsStyle/Topbar.css"
 
 interface TopbarProps {
   search: string

@@ -15,7 +15,7 @@ function Settings() {
                 </div>
                 <div className="settings__card">
                     <div className="settings__folder-input">
-                        <FolderInput/>
+                        <FolderInput />
                     </div>
                 </div>
             </section>
@@ -24,9 +24,7 @@ function Settings() {
                 <div className="settings__section-header">
                     <h2>Emuladores</h2>
                 </div>
-                <div className="settings__emulator-list">
-                    <EmulatorManager/>
-                </div>
+                <EmulatorManager />
             </section>
 
             <section className="settings__section">

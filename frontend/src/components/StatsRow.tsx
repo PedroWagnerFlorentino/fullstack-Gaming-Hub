@@ -1,4 +1,4 @@
-import "./StatsRow.css"
+import "./componentsStyle/StatsRow.css"
 
 interface StatRowProps {
     totalGames?: number
@@ -15,13 +15,13 @@ function StatRow({ totalGames, totalPlatforms }: StatRowProps) {
                 <span className="stats-row__value">
                     {isLoading ? "—" : totalGames}
                 </span>
-                <span className="stats-row__lable">Jogos</span>
+                <span className="stats-row__label">Jogos</span>
             </div>
             <div className="stats-row__card">
                 <span className="stats-row__value">
                     {isLoading ? "—" : totalPlatforms}
                 </span>
-                <span className="stats-row__lable">Plataformas</span>
+                <span className="stats-row__label">Plataformas</span>
             </div>
         </div>
     )
