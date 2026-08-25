@@ -17,6 +17,7 @@ const PLATFORMS = [
     { section: "SNES", title: "Super Nintendo" },
     { section: "GBA", title: "Game Boy Advance" },
     { section: "Nintendo 3DS", title: "Nintendo 3DS" },
+    { section: "Nintendo DS", title: "Nintendo DS" },
 ]
 
 interface LibraryPageProps {
