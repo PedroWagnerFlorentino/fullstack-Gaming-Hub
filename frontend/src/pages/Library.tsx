@@ -6,11 +6,11 @@ interface LibraryProps {
   loading: boolean
   games: Game[]
   displayViewMode: string
-  title?: string          // título da seção ex: "Nintendo Switch"
-  onPlay: (game: Game) => void
+  title?: string        
+  onOpenDetails: (game: Game) => void
 }
 
-function Library({ games, displayViewMode, title, loading, onPlay }: LibraryProps) {
+function Library({ games, displayViewMode, title, loading, onOpenDetails }: LibraryProps) {
 
   // Não renderiza a seção se não tiver jogos 
   if (!loading && games.length === 0) return null
@@ -77,7 +77,7 @@ function Library({ games, displayViewMode, title, loading, onPlay }: LibraryProp
               cover={game.cover}
               executablePath={game.rom_path}
               platform={game.platform}
-              onPlay={() => onPlay(game)}
+              onOpenDetails={() => onOpenDetails(game)}
             />
           ))}
         </div>

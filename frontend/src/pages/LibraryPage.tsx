@@ -7,6 +7,9 @@ import type { Game } from "../types/Games"
 import { launchGame } from "../services/gameServices"
 import { useGames } from "../context/GamesContext"
 import { useToast } from "../context/ToastContext"
+import "../components/GameDetailModal"
+import GameDetailsModal from "../components/GameDetailModal"
+
 
 // Seções de plataforma — adiciona novas aqui quando quiser
 const PLATFORMS = [
@@ -33,7 +36,7 @@ function LibraryPage({ search }: LibraryPageProps) {
     const [displayViewMode, setDisplayMode] = useState("rows")
     const [gridFilter, setFilter] = useState("all")
     const totalPlatforms = new Set(allGames.map(game => game.platform)).size
-
+    const [selectedGame, setSelectedGame] = useState<Game | null>(null)
 
     const handlePlay = async (game: Game) => {
         clear()
@@ -117,7 +120,7 @@ function LibraryPage({ search }: LibraryPageProps) {
                             displayViewMode={displayViewMode}
                             games={section === "all" ? filteredGames : filteredGames.filter(game => game.platform === section)}
                             loading={loading}
-                            onPlay={handlePlay}
+                            onOpenDetails={setSelectedGame}
                         />))
 
                 )
@@ -128,10 +131,18 @@ function LibraryPage({ search }: LibraryPageProps) {
                         displayViewMode={displayViewMode}
                         games={gridFilter === "all" ? filteredGames : filteredGames.filter(game => game.platform === gridFilter)}
                         loading={loading}
-                        onPlay={handlePlay}
+                        onOpenDetails={setSelectedGame}
                     />
                 )
             }
+            <GameDetailsModal
+                game={selectedGame}
+                onClose={() => setSelectedGame(null)}
+                onPlay={(game) => {
+                    handlePlay(game)
+                    setSelectedGame(null)
+                }}
+            />
         </>
     )
 }

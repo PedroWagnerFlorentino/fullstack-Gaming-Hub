@@ -1,11 +1,3 @@
-/*
-  GameCard — substitui o GameCard.tsx atual
-  Mesmas props de antes, visual novo estilo Netflix portrait.
-
-  O HOVER usa só CSS — sem useState, sem JS.
-  O overlay com o botão "Jogar" aparece via .game-card:hover .game-card__overlay
-*/
-
 import "./componentsStyle/GameCard.css"
 
 interface GameCardProps {
@@ -14,12 +6,12 @@ interface GameCardProps {
   cover: string
   executablePath: string
   platform?: string
-  onPlay: () => void
+  onOpenDetails: () => void
 }
 
-function GameCard({title, emulator, cover, platform, onPlay }: GameCardProps) {
+function GameCard({title, emulator, cover, platform, onOpenDetails }: GameCardProps) {
   return (
-    <div className="game-card">
+    <div className="game-card" onClick={onOpenDetails}>
 
       {/* CAPA */}
       <div className="game-card__cover">
@@ -30,18 +22,12 @@ function GameCard({title, emulator, cover, platform, onPlay }: GameCardProps) {
           <span className="game-card__cover-fallback">🎮</span>
         )}
 
-        {/* Badge da plataforma (ex: "N64") no canto superior direito */}
+        {/* Badge da plataforma (ex: "N64") */}
         {platform && (
           <span className="game-card__platform">{platform}</span>
         )}
 
-        {/*
-          Overlay que aparece no hover.
-          O CSS faz isso: .game-card:hover .game-card__overlay { opacity: 1 }
-          Sem nenhum JS ou useState!
-        */}
         <div className="game-card__overlay">
-          <button className="game-card__play-btn" onClick={() => onPlay()}>▶ Jogar</button>
         </div>
 
       </div>

@@ -1,0 +1,191 @@
+/* ── OVERLAY ── */
+.game-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+
+  background: rgba(5, 8, 15, 0.72);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+
+  animation: modal-fade-in 0.25s ease both;
+}
+
+@keyframes modal-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* ── PAINEL ── */
+.game-modal {
+  width: 90vw;
+  max-width: 1180px;
+  height: 88vh;
+  max-height: 820px;
+
+  background: var(--navy-2);
+  border: 1px solid var(--border-hover);
+  border-radius: 14px;
+  overflow: hidden;
+  position: relative;
+
+  box-shadow:
+    0 30px 80px rgba(0, 0, 0, 0.65),
+    0 0 60px var(--blue-glow);
+
+  animation: modal-scale-in 0.3s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes modal-scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.92) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* ── BOTÃO FECHAR ── */
+.game-modal__close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 10;
+
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.55);
+  color: var(--text);
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background var(--transition);
+}
+
+.game-modal__close:hover {
+  background: rgba(255, 82, 82, 0.75);
+}
+
+/* ── GRID PRINCIPAL: capa | conteúdo ── */
+.game-modal__body {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 28px;
+  height: 100%;
+  padding: 36px;
+}
+
+/* ── COLUNA ESQUERDA ── */
+.game-modal__left {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.game-modal__cover-box {
+  width: 100%;
+  aspect-ratio: 2 / 3;   /* proporção clássica de capa de jogo, sem esticar */
+  border-radius: 10px;
+  background: var(--card-bg-2);
+  border: 1px solid var(--border-hover);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
+}
+
+.game-modal__cover-box img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;   /* preenche a caixa, mas a caixa mantém a proporção certa */
+}
+
+.game-modal__cover-fallback {
+  font-size: 56px;
+}
+
+.game-modal__actions {
+  display: flex;
+  flex-direction: column;
+}
+
+.game-modal__play-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: var(--blue);
+  color: #fff;
+  border-radius: var(--radius);
+  padding: 13px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  box-shadow: 0 4px 18px rgba(41, 121, 255, 0.40);
+  transition: all var(--transition);
+}
+
+.game-modal__play-btn:hover {
+  background: #3d8aff;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 24px rgba(41, 121, 255, 0.50);
+}
+
+/* ── COLUNA DIREITA ── */
+.game-modal__right {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  min-width: 0;   /* evita que texto longo estoure o grid */
+}
+
+.game-modal__info-box,
+.game-modal__trailer-box {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px 28px;
+}
+
+.game-modal__info-box {
+  flex-shrink: 0;
+}
+
+.game-modal__trailer-box {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 0;
+}
+
+.game-modal__title {
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 700;
+  font-size: 28px;
+  color: var(--text);
+  margin-bottom: 6px;
+}
+
+.game-modal__meta {
+  color: var(--blue);
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+
+.game-modal__placeholder-text {
+  color: var(--text-3);
+  font-size: 13px;
+  font-style: italic;
+}
