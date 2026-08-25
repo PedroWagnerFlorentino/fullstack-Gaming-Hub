@@ -41,8 +41,13 @@ function LibraryPage({ search }: LibraryPageProps) {
     const handlePlay = async (game: Game) => {
         clear()
         try {
-            await launchGame(game.id)
-            showSuccess("Jogo iniciando aguarde")
+            const response = await launchGame(game.id)
+            if (!response.ok) {
+                const erro = await response.json().catch(() => null) 
+                showError(erro?.detail ?? "Erro ao iniciar o jogo!")
+            } else {
+                showSuccess("Jogo iniciando aguarde")
+            }
         }
         catch (error) {
             showError(`Erro ao iniciar o jogo! Erro detalhado: ${error}`)

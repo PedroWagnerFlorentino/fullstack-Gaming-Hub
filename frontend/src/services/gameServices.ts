@@ -51,6 +51,6 @@ export async function launchGame(game_id: number) {
         method: "POST",
         headers: { "Content-Type": "application/json" },
     })
-    return await response.json()
+    return response;
 
 }
