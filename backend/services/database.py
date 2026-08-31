@@ -16,7 +16,9 @@ def init_db_games(conn):
             title VARCHAR(150),
             platform VARCHAR(150),
             rom_path VARCHAR(2000) UNIQUE,
-            cover_url VARCHAR(500)
+            cover_url VARCHAR(500),
+            genre VARCHAR(500),
+            summary TEXT
         );
         """
     )

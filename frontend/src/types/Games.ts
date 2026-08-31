@@ -4,6 +4,8 @@ export interface Game {
     platform: string;
     emulator: string;
     cover: string;
+    genres: string;
+    summary: string;
     rom_path: string;
 }
 

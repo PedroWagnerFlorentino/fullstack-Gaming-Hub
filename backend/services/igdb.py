@@ -18,7 +18,7 @@ def get_token() -> str:
     )
     return response.json()["access_token"]
 
-def get_cover(game_title: str) -> str:
+def get_game_data(game_title: str) -> list:
     token = get_token()  # usa a função de pedir o token para a twitch
 
     response = requests.post(
@@ -27,15 +27,22 @@ def get_cover(game_title: str) -> str:
             "Client-ID": CLIENT_ID,
             "Authorization": f"Bearer {token}"
         },
-        data=f'search "{game_title}"; fields name,cover.url; limit 1;'
+        data=f'search "{game_title}"; fields name,cover.url,genres.name,summary;'
     )
 
     data = response.json()
 
-    if not data or not data[0].get("cover"):
-        return ""
+    if not data:
+        return ["", "", ""]
 
-    url = data[0]["cover"]["url"]  # pega a url recebida e troca o tamanho da imagem
-    url = url.replace("t_thumb", "t_cover_big")
-    url = "https:" + url
-    return url
+    cover_obj = data.get("cover", {})
+    url = cover_obj.get("url", "")
+
+    if url:
+        url = "https:" + url.replace("t_thumb", "t_cover_big")
+
+    genres = ", ".join(g["name"] for g in data[0].get("genres", []))
+
+    summary = data[0].get("summary", "")
+
+    return [url, genres, summary]

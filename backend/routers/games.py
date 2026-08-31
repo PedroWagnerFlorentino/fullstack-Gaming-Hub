@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 from pydantic import BaseModel
-from services.igdb import get_cover
+from services.igdb import get_game_data
 from services.database import get_db
 import os, re
 
@@ -13,6 +13,8 @@ class GamesResponse(BaseModel):
     title: str
     platform: str
     cover: str | None = None
+    genres: str | None = None
+    summary: str | None = None
     rom_path: str
 
 
@@ -56,6 +58,8 @@ def get_games():
             title=game["title"],
             platform=game["platform"],
             cover=game["cover_url"],
+            genres=game["genre"],
+            summary=game["summary"],
             rom_path=game["rom_path"],
         ))
 
@@ -75,20 +79,24 @@ def scan_folder(folders: ScanRequest):
 
             if ext in ROM_EXTENSIONS:
                 clean_name_game = clean_title(name)
+
+                game_data = get_game_data(clean_name_game)
                 
                 game = {
                     "title": clean_name_game,
                     "platform": ROM_EXTENSIONS[ext],
                     "rom_path": os.path.join(folder, file),
-                    "cover": get_cover(clean_name_game),
+                    "cover": game_data[0],
+                    "genre": game_data[1],
+                    "summary": game_data[2]
                 }
 
                 cur.execute(
                             """
                             INSERT OR IGNORE INTO gaming_hub_games
-                            (title, platform, rom_path, cover_url)
-                            VALUES (?, ?, ?, ?)
-                            """, (game["title"], game["platform"], game["rom_path"], game["cover"])
+                            (title, platform, rom_path, cover_url, genre, summary)
+                            VALUES (?, ?, ?, ?, ?, ?)
+                            """, (game["title"], game["platform"], game["rom_path"], game["cover"], game["genre"], game["summary"])
                           )
                 games.append(game)
         
