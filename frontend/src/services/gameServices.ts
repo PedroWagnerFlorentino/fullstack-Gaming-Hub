@@ -42,7 +42,7 @@ export async function deleteEmulator(emulator_id: number) {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
     })
-    return await response.json()
+    return response
 
 }
 

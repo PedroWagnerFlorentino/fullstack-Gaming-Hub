@@ -108,8 +108,18 @@ function EmulatorManager() {
                         <span className="emulator-manager__badge">{emulator_path}</span>
                         <button className="emulator-manager__delete" onClick={
                             async () => {
-                                await deleteEmulator(id)
-                                await buscarEmuladores()
+                                try {
+                                    const response = await deleteEmulator(id)
+                                    if (!response.ok) {
+                                        const erro = await response.json().catch(() => null)
+                                        showError(erro?.detail ?? "Erro ao deletar emulador")
+                                    }
+                                    await buscarEmuladores()
+                                    showSuccess("Emulador deletado com sucesso!")
+                                }
+                                catch (error) {
+                                    showError(`Erro ao deletar o emulador. Erro detalhado ${error}`)
+                                }
                             }
                         }>
                             <span>🗑️</span>

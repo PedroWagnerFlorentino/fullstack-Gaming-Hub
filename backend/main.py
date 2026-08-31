@@ -27,8 +27,3 @@ app.add_middleware(
 
 app.include_router(games_router, prefix="/games", tags=["Games"])
 app.include_router(emulators_router, prefix="/emulators", tags=["Emulators"])
-
-
-@app.get("/")
-def root():
-    return {"Message": "Gamimng Hub API"}
