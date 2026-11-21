@@ -1,4 +1,5 @@
 import sqlite3
+import os
 from pydantic import BaseModel
 from fastapi import APIRouter, HTTPException
 from services.database import get_db
@@ -21,8 +22,20 @@ class LaunchPath(BaseModel):
 
 
 def launch_game(paths: LaunchPath):
+    if not os.path.isfile(paths.emulator_path) or not os.path.splitext(paths.emulator_path)[1].lower() == ".exe":
+        raise HTTPException(
+            status_code=404,
+            detail="Emulador não encontrado. Revise o caminho em Configurações.",
+        )
+    if not os.path.isfile(paths.rom_path):
+        raise HTTPException(
+            status_code=404,
+            detail="ROM não encontrada. Revise o caminho em Configurações.",
+        )
+    
     try:
         subprocess.Popen([paths.emulator_path, paths.rom_path])
+        pass
 
     except FileNotFoundError:
         return {"message": "Emulador ou ROM não encontrado. Revise os caminhos."}
@@ -104,8 +117,8 @@ def lauch_requisition(game_id :int):
         emulator_path = emulator_row[0]
 
     except sqlite3.Error as e:
-        conn.close()
         raise HTTPException(status_code=500, detail=f"Erro no banco de dados: {e}")
+    finally:
+        conn.close()        
     
-    conn.close()
     return launch_game(LaunchPath(emulator_path=emulator_path, rom_path=game_path))

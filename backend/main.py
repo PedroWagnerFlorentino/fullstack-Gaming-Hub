@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+import uvicorn
 from routers.games import games_router
 from routers.emulators import emulators_router
 from fastapi.middleware.cors import CORSMiddleware
@@ -27,3 +28,7 @@ app.add_middleware(
 
 app.include_router(games_router, prefix="/games", tags=["Games"])
 app.include_router(emulators_router, prefix="/emulators", tags=["Emulators"])
+
+
+if __name__ == "__main__":
+    uvicorn.run(app, host="127.0.0.1", port=8000)

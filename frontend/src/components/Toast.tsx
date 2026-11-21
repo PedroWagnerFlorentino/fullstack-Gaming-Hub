@@ -20,7 +20,7 @@ function Toast() {
 
         if (displayed) {
             setLeaving(true)
-            const timer = setTimeout(() => { setDisplayed(null), EXIT_DURATION })
+            const timer = setTimeout(() => setDisplayed(null), EXIT_DURATION )
             return () => clearTimeout(timer)
         }
 

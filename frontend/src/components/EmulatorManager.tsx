@@ -29,6 +29,23 @@ function EmulatorManager() {
         }
     }
 
+    const deletarEmulador = async (id: number) => {
+        try {
+            const response = await deleteEmulator(id)
+            if (!response.ok) {
+                const erro = await response.json().catch(() => null)
+                showError(erro?.detail ?? "Erro ao deletar emulador")
+                return
+            }
+            await buscarEmuladores()
+            showSuccess("Emulador deletado com sucesso!")
+        }
+        catch (error) {
+            showError(`Erro ao deletar o emulador. Erro detalhado ${error}`)
+        }
+
+    }
+
     useEffect(() => {
         buscarEmuladores()
     }, [])
@@ -42,13 +59,13 @@ function EmulatorManager() {
                 await buscarEmuladores()
                 showSuccess(`Emulador cadastrado com sucesso para a plataforma ${platform}`)
                 setPlatform("")
-                setExecutablePath("")
                 setInput("")
             }
             catch (error) {
                 showError(`Houve um erro ao registrar o emulador! Erro detalhado: ${error}`)
             }
             finally {
+                setExecutablePath("")
                 setLoading(false)
             }
         }
@@ -94,7 +111,7 @@ function EmulatorManager() {
                         setExecutablePath(input)
                         setLoading(true)
                     }}
-                    disabled={loading || !input.trim()}
+                    disabled={loading || !platform || !input.trim()}
                 >Registrar Emulador</button>
 
             </section>
@@ -107,20 +124,7 @@ function EmulatorManager() {
                         <span className="emulator-manager__platform">{platform}</span>
                         <span className="emulator-manager__badge">{emulator_path}</span>
                         <button className="emulator-manager__delete" onClick={
-                            async () => {
-                                try {
-                                    const response = await deleteEmulator(id)
-                                    if (!response.ok) {
-                                        const erro = await response.json().catch(() => null)
-                                        showError(erro?.detail ?? "Erro ao deletar emulador")
-                                    }
-                                    await buscarEmuladores()
-                                    showSuccess("Emulador deletado com sucesso!")
-                                }
-                                catch (error) {
-                                    showError(`Erro ao deletar o emulador. Erro detalhado ${error}`)
-                                }
-                            }
+                            async () => { deletarEmulador(id) }
                         }>
                             <span>🗑️</span>
                         </button>

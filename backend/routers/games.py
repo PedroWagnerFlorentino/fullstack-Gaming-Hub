@@ -1,8 +1,8 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
-from services.igdb import get_game_data
+from services.igdb import get_game_data, get_trailer_from_igdb
 from services.database import get_db
-import os, re
+import os, re, requests
 
 class ScanRequest(BaseModel):
     folders: list[str]
@@ -15,6 +15,7 @@ class GamesResponse(BaseModel):
     cover: str | None = None
     genres: str | None = None
     summary: str | None = None
+    trailer_video_id: str | None = None
     rom_path: str
 
 
@@ -60,11 +61,44 @@ def get_games():
             cover=game["cover_url"],
             genres=game["genre"],
             summary=game["summary"],
+            trailer_video_id=game["trailer_video_id"],
             rom_path=game["rom_path"],
         ))
 
     conn.close()
     return games_formatados
+
+@games_router.get("/{game_id}/trailer")
+def get_trailer_id(game_id: int):
+    conn = get_db()
+    try:
+        cur = conn.cursor()
+
+        cur.execute("SELECT * FROM gaming_hub_games WHERE id=?",(game_id,))
+        game = cur.fetchone()
+
+        if not game:
+            raise HTTPException(status_code=404, detail="Jogo não encontrado")
+        
+        cached = game["trailer_video_id"]  # trailer_video_id
+        if cached is not None:  # "" means: already searched, no trailer exists
+            return {"video_id": cached or None}
+
+        title = clean_title(game["title"])
+
+        try:
+            video_id = get_trailer_from_igdb(title)
+        except requests.RequestException:
+                raise HTTPException(status_code=502, detail="Não foi possível consultar o IGDB agora.")
+        print(video_id)
+        cur.execute(
+            "UPDATE gaming_hub_games SET trailer_video_id = ? WHERE id = ?",
+            (video_id or "", game_id),
+        )
+        conn.commit()
+        return {"video_id": video_id}
+    finally:
+        conn.close()
 
 
 @games_router.post("/scan")

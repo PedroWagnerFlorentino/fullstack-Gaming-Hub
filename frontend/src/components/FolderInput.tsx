@@ -32,7 +32,7 @@ function FolderInput() {
             <button
                 disabled={scanning || !input.trim()}
                 onClick={handleScan}
-            >Eviar pasta</button>
+            >Enviar pasta</button>
         </div>
     )
 }

@@ -18,7 +18,8 @@ def init_db_games(conn):
             rom_path VARCHAR(2000) UNIQUE,
             cover_url VARCHAR(500),
             genre VARCHAR(500),
-            summary TEXT
+            summary TEXT,
+            trailer_video_id TEXT
         );
         """
     )

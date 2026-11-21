@@ -1,9 +1,10 @@
 import { createPortal } from "react-dom"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import type { Game } from "../types/Games"
 import "./componentsStyle/GameDetailModel.css"
+import { getTrailer } from "../services/gameServices"
 
-
+type TrailerStatus = "loading" | "ready" | "none" | "error"
 interface GameDetailsModalProps {
     game: Game | null
     onClose: () => void
@@ -11,6 +12,11 @@ interface GameDetailsModalProps {
 }
 
 function GameDetailsModal({ game, onClose, onPlay }: GameDetailsModalProps) {
+
+    const [videoId, setVideoId] = useState<string | null>(null)
+    const [trailerStatus, setTrailerStatus] = useState<TrailerStatus>("loading")
+    const [expanded, setExpanded] = useState(false)
+    const isLongSummary = (game?.summary?.length ?? 0) > 300
 
     useEffect(() => {
         if (!game) return;
@@ -20,6 +26,26 @@ function GameDetailsModal({ game, onClose, onPlay }: GameDetailsModalProps) {
         window.addEventListener("keydown", handleKey)
         return () => window.removeEventListener("keydown", handleKey)
     }, [game, onClose])
+
+    useEffect(() => {
+        if (!game) return;
+        setExpanded(prev => !prev)
+        let canceled = false;
+        setTrailerStatus("loading")
+        getTrailer(game.id)
+            .then((id) => {
+                if (canceled) return;
+                setVideoId(id)
+                setTrailerStatus(id ? "ready" : "none")
+            })
+            .catch(() => {
+                if (!canceled) {
+                    setTrailerStatus("error")
+                }
+            })
+        return () => { canceled = true }
+
+    }, [game?.id])
 
     if (!game) return;
 
@@ -59,18 +85,45 @@ function GameDetailsModal({ game, onClose, onPlay }: GameDetailsModalProps) {
                             <span>{game.platform ?? game.emulator}</span>
                         </p>
 
-                        {/* Espaço reservado — Fase 3 preenche com descrição/gênero via IGDB */}
-                        <p className="game-modal__placeholder-text">
-                            <span className="game-modal__meta" >{game.genres}</span> <br />
-                            <span>{game.summary}</span>
-                        </p>
+                        {game.genres && <p className="game-modal__genres">{game.genres}</p>
+                        }
+                        {game.summary &&
+                            <>
+                                <p className={`game-modal__summary${expanded ? " game-modal__summary--expanded" : ""}`}>
+                                    {game.summary}
+                                </p>
+
+                                {isLongSummary && (
+                                    <button
+                                        className="game-modal__summary-toggle"
+                                        onClick={() => setExpanded(prev => !prev)}
+                                    >
+                                        {expanded ? "Ler menos" : "Ler mais"}
+                                    </button>
+                                )}
+                            </>
+                        }
+
                     </div>
 
                     <div className="game-modal__trailer-box">
-                        {/* Espaço reservado — Fase 1 completa entra o iframe do trailer aqui */}
-                        <span className="game-modal__placeholder-text">
-                            Trailer aparecerá aqui em breve.
-                        </span>
+                        {trailerStatus === "loading" && (
+                            <span className="game-modal__placeholder-text">Carregando trailer...</span>
+                        )}
+                        {trailerStatus === "none" && (
+                            <span className="game-modal__placeholder-text">Trailer indisponível para este jogo.</span>
+                        )}
+                        {trailerStatus === "error" && (
+                            <span className="game-modal__placeholder-text">Não foi possível carregar o trailer.</span>
+                        )}
+                        {trailerStatus === "ready" && videoId && (
+                            <iframe
+                                src={`https://www.youtube-nocookie.com/embed/${videoId}`}
+                                title={`Trailer de ${game.title}`}
+                                allow="encrypted-media; picture-in-picture; fullscreen"
+                                allowFullScreen
+                            />
+                        )}
                     </div>
 
                 </div>

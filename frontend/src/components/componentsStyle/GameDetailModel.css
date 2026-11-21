@@ -79,10 +79,12 @@
 .game-modal__body {
   display: grid;
   grid-template-columns: 300px 1fr;
+  grid-template-rows: minmax(0, 1fr);
   gap: 28px;
   height: 100%;
   padding: 36px;
 }
+
 
 /* ── COLUNA ESQUERDA ── */
 .game-modal__left {
@@ -145,7 +147,12 @@
   display: flex;
   flex-direction: column;
   gap: 20px;
-  min-width: 0;   /* evita que texto longo estoure o grid */
+  min-width: 0;
+  min-height: 0;
+  overflow-y: auto;
+  padding-right: 8px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-hover) transparent;
 }
 
 .game-modal__info-box,
@@ -155,17 +162,15 @@
   border-radius: var(--radius);
   padding: 24px 28px;
 }
-
-.game-modal__info-box {
-  flex-shrink: 0;
-}
-
 .game-modal__trailer-box {
-  flex: 1;
+  flex: 1 0 auto;
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 0;
+}
+
+.game-modal__info-box {
+  flex-shrink: 0;
 }
 
 .game-modal__title {
@@ -184,8 +189,55 @@
   margin-bottom: 14px;
 }
 
-.game-modal__placeholder-text {
-  color: var(--text-3);
-  font-size: 13px;
-  font-style: italic;
+.game-modal__trailer-box iframe {
+  width: 100%;
+  max-width: 560px;
+  aspect-ratio: 16 / 9;
+  height: auto;
+  border: 0;
+  border-radius: 12px;
+}
+
+.game-modal__genres {
+  color: var(--blue);
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.game-modal__summary {
+  color: var(--text-2, var(--text-3));
+  font-size: 14px;
+  line-height: 1.6;
+
+  /* corta em 4 linhas e termina com "…" */
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.game-modal__summary--expanded {
+  display: block;
+  -webkit-line-clamp: unset;
+  line-clamp: unset;
+  overflow: visible;
+}
+
+.game-modal__summary-toggle {
+  background: none;
+  padding: 0;
+  margin-top: 8px;
+  color: var(--blue);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.game-modal__summary-toggle:hover {
+  text-decoration: underline;
 }

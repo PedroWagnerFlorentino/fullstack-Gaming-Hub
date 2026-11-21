@@ -54,3 +54,13 @@ export async function launchGame(game_id: number) {
     return response;
 
 }
+
+export async function getTrailer(game_id: number): Promise<string | null> {
+    const response = await fetch(`http://localhost:8000/games/${game_id}/trailer`, {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+    })
+    if (!response.ok) throw new Error("Não foi possível carregar o trailer")
+    const data = await response.json()
+    return data.video_id
+}
