@@ -40,3 +40,20 @@ def init_db_emulators(conn):
     )
 
     conn.commit()
+
+
+def init_db_profile_settings(conn):
+    cur = conn.cursor()
+
+    # KEY = TWITCH_CLIENT_ID  VALUE = TWITCH_CLIENT_SECRET
+
+    cur.execute(
+        """
+        CREATE TABLE IF NOT EXISTS gaming_hub_settings (
+            key TEXT PRIMARY KEY,
+            value TEXT
+        );
+        """
+    )
+
+    conn.commit()

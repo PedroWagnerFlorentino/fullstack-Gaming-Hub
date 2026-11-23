@@ -3,6 +3,9 @@ import os
 from dotenv import load_dotenv
 
 load_dotenv()
+class InvalidCredentialsError(Exception):
+    pass
+
 
 CLIENT_ID = os.getenv("TWITCH_CLIENT_ID")
 CLIENT_SECRET = os.getenv("TWITCH_CLIENT_SECRET")
@@ -17,6 +20,23 @@ def get_token() -> str:
         }
     )
     return response.json()["access_token"]
+
+
+def request_token(client_id: str, client_secret: str) -> dict:
+    response = requests.post(
+        "https://id.twitch.tv/oauth2/token",
+        params={
+            "client_id": client_id,
+            "client_secret": client_secret,
+            "grant_type": "client_credentials",
+        },
+        timeout=10,
+    )
+    if response.status_code in (400, 403):  # invalid id / invalid secret
+        raise InvalidCredentialsError()
+    response.raise_for_status()
+    return response.json()  # contains "access_token" and "expires_in"
+
 
 def get_game_data(game_title: str) -> list:
     token = get_token()  # usa a função de pedir o token para a twitch
@@ -46,6 +66,7 @@ def get_game_data(game_title: str) -> list:
     summary = data[0].get("summary", "")
 
     return [url, genres, summary]
+
 
 def get_trailer_from_igdb(game_title: str) -> str | None:
     token = get_token()  # usa a função de pedir o token para a twitch
